@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: galaxy_party_production
-  username: galaxy_party
-  password: <%= ENV["GALAXY_PARTY_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
