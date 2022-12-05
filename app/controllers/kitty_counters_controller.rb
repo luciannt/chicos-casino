@@ -1,0 +1,2 @@
+class KittyCountersController < ApplicationController
+end
