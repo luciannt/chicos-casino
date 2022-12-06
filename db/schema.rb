@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_02_103624) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_06_090914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_103624) do
     t.integer "order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "game_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -62,6 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_103624) do
     t.string "phase"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "code"
   end
 
   create_table "user_scores", force: :cascade do |t|
@@ -74,6 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_103624) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "current_game_code"
   end
 
 end

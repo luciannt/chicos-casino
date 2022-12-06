@@ -1,0 +1,25 @@
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.scores {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.createGame {
+  border: solid 1px black;
+  padding: 30px;
+  margin-right: 20px;
+}
+
+.joinGame {
+  border: solid 1px black;
+  padding: 30px;
+  margin-left: 20px;
+}

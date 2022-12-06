@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   post "/signup", to: "users#create"
+  get "/game/:code", to: "games#get_by_code"
 
   mount ActionCable.server => "/cable"
 end

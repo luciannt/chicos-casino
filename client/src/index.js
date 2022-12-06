@@ -1,17 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { CableProvider } from "./context/cable";
 import Router from "./Router";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import rootReducer from "./reducers";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
+
 root.render(
   <React.StrictMode>
-    <CableProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Router />
       </BrowserRouter>
-    </CableProvider>
+    </Provider>
   </React.StrictMode>
 );
