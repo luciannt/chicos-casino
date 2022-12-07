@@ -5,6 +5,7 @@ import Login from "./views/Login/Login";
 import Index from "./views/index";
 import Menu from "./views/Menu/Menu";
 import GameCode from "./views/_GameCode/GameCode";
+import Game from "./components/Game/Game";
 
 const Router = () => {
   return (
@@ -14,6 +15,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/game/:code" element={<GameCode />} />
+        <Route path="/game" element={<Game />} />
       </Routes>
     </main>
   );

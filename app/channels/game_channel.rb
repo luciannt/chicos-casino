@@ -14,20 +14,26 @@ class GameChannel < ApplicationCable::Channel
     ActionCable.server.broadcast("game_channel", data)
   end
 
-  def game_check(user_id)
-    user = User.find(user_id)
-    code = user[:current_game_code]
+  def game_check(opts)
+    ActionCable.server.broadcast("game_channel", { type: "CHECKING GAME", payload: opts })
 
-    if code
-      ActionCable.server.broadcast("game_channel", { type: "CHECK_GAME_VIABILITY", payload: Game.can_start_game(code) })
+    if (opts["user_id"])
+      user = User.find(opts["user_id"])
+    else
+      ActionCable.server.broadcast("game_channel", { type: "FAILURE", message: "No user id supplied, please log in" })
     end
 
-    if user && code
-      game = Game.find_by_game_code(code)
+    if opts["code"]
+      ActionCable.server.broadcast("game_channel", { type: "CHECK_GAME_VIABILITY", payload: Game.can_start_game(opts["code"]) })
+    end
 
-      if !(game[:users].include? user)
-        Game.join_game(user_id, code)
-        ActionCable.server.broadcast "game_channel", "joined game"
+    if user && opts["code"]
+      game = Game.find_by_game_code(opts["code"])
+      gamePlayers = GamePlayer.where(game: game)
+      ActionCable.server.broadcast("game_channel", { type: "CURRENT_PLAYERS", payload: gamePlayers.to_json })
+
+      if !(gamePlayers.exists? user[:id])
+        Game.join_game(opts["user_id"], opts["code"])
       end
     end
   end

@@ -1,0 +1,34 @@
+.board-container {
+  height: 100vh;
+}
+
+.board {
+  height: 100vw;
+  width: 100vw;
+  z-index: 2 !important;
+}
+
+.cell {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+
+  &.normal {
+    background-image: url("../../../assets/normal.png");
+    background-size: contain;
+  }
+
+  &.red {
+    background-image: url("../../../assets/red.png");
+    background-size: contain;
+  }
+
+  &.double {
+    background-image: url("../../../assets/double.png");
+    background-size: contain;
+  }
+
+  &-1 {
+    transform: translateX(50px);
+  }
+}

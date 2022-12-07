@@ -6,22 +6,19 @@ import InviteScreen from "../../layout/InviteScreen/InviteScreen";
 import Cable from "actioncable";
 import { LOGIN, SET_GAME_SUBSCRIPTIONS } from "../../reducers/constants";
 
+import { useParams } from "react-router-dom";
+
 const GameCode = () => {
   const dispatch = useDispatch();
   const gameChannel = useSelector((state) => state.connections.game);
-  const session = useSelector((state) => state.sessions.id);
+  const session = useSelector((state) => state.sessions);
+
+  const { code } = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const createSocket = () => {
-      if (!session?.id) {
-        axios.get("/me").then((res) => {
-          console.log(res.data);
-          dispatch({ type: LOGIN, payload: { ...res.data } });
-        });
-      }
-
       const cable = Cable.createConsumer("ws://localhost:3000/cable");
 
       const gameConnection = cable.subscriptions.create(
@@ -30,25 +27,24 @@ const GameCode = () => {
         },
         {
           received: (data) => {
+            console.log("DATA", data);
             if (data.action) {
               dispatch(JSON.parse(data));
             }
           },
           game_check: () => {
             gameConnection.perform("game_check", {
-              user_id: session?.id || session,
+              user_id: session?.id,
+              code,
             });
           },
           new_game: () => {
             gameConnection.perform("new_game", {
-              user_id: session?.id || session,
+              user_id: session?.id,
             });
           },
         }
       );
-
-      console.log(session?.current_game_code);
-      console.log("session", session);
 
       dispatch({ type: SET_GAME_SUBSCRIPTIONS, payload: gameConnection });
     };
@@ -57,12 +53,36 @@ const GameCode = () => {
   }, []);
 
   useEffect(() => {
-    gameChannel.game_check();
+    const intervalId = setInterval(() => {
+      gameChannel?.game_check();
+    }, 5000);
+
+    console.log(code, session);
+
+    return () => clearInterval(intervalId);
   }, [gameChannel]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!session.id || !session.current_game_code !== code) {
+        axios.get("/me").then((res) => {
+          console.log(res.data);
+          dispatch({ type: LOGIN, payload: res.data });
+        });
+      }
+    }, 5000);
+
+    console.log(code, session);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div>
-      <InviteScreen />
+      {session?.current_game_code !== code && (
+        <h1>Attempting to join game...</h1>
+      )}
+      {session?.current_game_code === code && <InviteScreen />}
     </div>
   );
 };
