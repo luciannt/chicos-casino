@@ -13,12 +13,14 @@ import {
 } from "../../reducers/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Menu = () => {
   const dispatch = useDispatch();
   const gameChannel = useSelector((state) => state.connections.game);
   const session = useSelector((state) => state.sessions.id);
 
+  const [inviteCode, setInviteCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,8 +68,12 @@ const Menu = () => {
     gameChannel?.new_game();
   };
 
+  const onChangeHandler = (e) => {
+    setInviteCode(e.target.value);
+  };
+
   const onJoinGame = () => {
-    // TODO: Implement join logic
+    navigate(`/game/${inviteCode}`);
   };
 
   return (
@@ -81,7 +87,11 @@ const Menu = () => {
         <div className={styles.joinGame}>
           <h2>Join Game</h2>
           <h4>Input game code to join an existing match</h4>
-          <input type="text" placeholder="Enter game code" />
+          <input
+            type="text"
+            placeholder="Enter game code"
+            onChange={onChangeHandler}
+          />
           <button onClick={onJoinGame}>Join</button>
         </div>
       </div>

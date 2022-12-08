@@ -29,8 +29,15 @@ class GameChannel < ApplicationCable::Channel
 
     if user && opts["code"]
       game = Game.find_by_game_code(opts["code"])
-      gamePlayers = GamePlayer.where(game: game)
-      ActionCable.server.broadcast("game_channel", { type: "CURRENT_PLAYERS", payload: gamePlayers.to_json })
+      gamePlayers = Player.where(game: game)
+
+      playerArr = []
+      gamePlayers.each do |player|
+        user = User.find(player[:user_id])
+        playerArr.append({ **player, username: user[:username] })
+      end
+
+      ActionCable.server.broadcast("game_channel", { type: "CURRENT_PLAYERS", payload: playerArr })
 
       if !(gamePlayers.exists? user[:id])
         Game.join_game(opts["user_id"], opts["code"])
@@ -38,7 +45,10 @@ class GameChannel < ApplicationCable::Channel
     end
   end
 
-  def take_turn
+  def start_game(code)
+    gamePlayers = Player.where(game: game)
+    table = Game.start_game(code, gamePlayers[0], gamePlayers[1])
+    ActionCable.server.broadcast("game_channel", { type: "STARTED", payload: table })
   end
 
   def new_game(opts)

@@ -1,2 +1,0 @@
-class KittyCounter < ApplicationRecord
-end

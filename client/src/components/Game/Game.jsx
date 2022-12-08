@@ -1,8 +1,11 @@
 import React from "react";
 import { Client } from "boardgame.io/react";
-import { GameSetup } from "./GameSetup";
+import { Blackjack } from "./GameSetup";
 import Board from "../Board/Board";
 
-const Game = Client({ game: GameSetup, board: Board });
+const Game = Client({
+  game: Blackjack,
+  board: Board,
+});
 
 export default Game;

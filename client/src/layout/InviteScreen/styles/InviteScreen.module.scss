@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 99vh;
+  flex-direction: column;
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+
+  .invite-code {
+    border: solid 1px black;
+    padding: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-bottom: 16px;
+    width: 60%;
+    text-align: center;
+
+    &:hover {
+      background: rgb(110, 110, 110);
+      color: white;
+    }
+  }
+}

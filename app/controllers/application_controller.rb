@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
     if user
       render json: user
     else
-      render json: { error: "Not authorized" }, status: :unauthorized
+      render json: { error: "Unauthorized user" }, status: :unauthorized
     end
   end
 end

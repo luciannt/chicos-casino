@@ -10,33 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_06_090914) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_08_060804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "game_players", force: :cascade do |t|
-    t.integer "order"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "game_id"
-  end
 
   create_table "games", force: :cascade do |t|
     t.integer "turn_count"
     t.string "game_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "kitty_counters", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "matchings", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "table_id"
   end
 
   create_table "player_rankings", force: :cascade do |t|
@@ -46,9 +29,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_090914) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "poke_games", force: :cascade do |t|
+  create_table "players", force: :cascade do |t|
+    t.integer "bet"
+    t.integer "seat"
+    t.integer "active_hand"
+    t.json "hands_data"
+    t.integer "game_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "table_id"
   end
 
   create_table "scores", force: :cascade do |t|
@@ -57,14 +47,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_090914) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "turns", force: :cascade do |t|
-    t.integer "number"
-    t.integer "players_gone"
-    t.string "mini_game"
-    t.string "phase"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "code"
+  create_table "tables", id: :serial, force: :cascade do |t|
+    t.json "shoe_data"
+    t.json "dealer_hand_data"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "user_scores", force: :cascade do |t|

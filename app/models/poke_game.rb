@@ -1,2 +1,0 @@
-class PokeGame < ApplicationRecord
-end

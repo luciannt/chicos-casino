@@ -27,9 +27,9 @@ const GameCode = () => {
         },
         {
           received: (data) => {
-            console.log("DATA", data);
-            if (data.action) {
-              dispatch(JSON.parse(data));
+            // console.log("DATA", data);
+            if (data.type) {
+              dispatch(data);
             }
           },
           game_check: () => {
@@ -57,8 +57,6 @@ const GameCode = () => {
       gameChannel?.game_check();
     }, 5000);
 
-    console.log(code, session);
-
     return () => clearInterval(intervalId);
   }, [gameChannel]);
 
@@ -66,13 +64,10 @@ const GameCode = () => {
     const intervalId = setInterval(() => {
       if (!session.id || !session.current_game_code !== code) {
         axios.get("/me").then((res) => {
-          console.log(res.data);
           dispatch({ type: LOGIN, payload: res.data });
         });
       }
     }, 5000);
-
-    console.log(code, session);
 
     return () => clearInterval(intervalId);
   }, []);
