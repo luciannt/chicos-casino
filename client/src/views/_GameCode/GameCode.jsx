@@ -5,13 +5,15 @@ import axios from "axios";
 import InviteScreen from "../../layout/InviteScreen/InviteScreen";
 import Cable from "actioncable";
 import { LOGIN, SET_GAME_SUBSCRIPTIONS } from "../../reducers/constants";
-
+import styles from "./styles/GameCode.module.scss";
 import { useParams } from "react-router-dom";
+import Game from "../../components/Game/Game";
 
 const GameCode = () => {
   const dispatch = useDispatch();
   const gameChannel = useSelector((state) => state.connections.game);
   const session = useSelector((state) => state.sessions);
+  const game = useSelector((state) => state.game);
 
   const { code } = useParams();
 
@@ -75,9 +77,12 @@ const GameCode = () => {
   return (
     <div>
       {session?.current_game_code !== code && (
-        <h1>Attempting to join game...</h1>
+        <h1 className={styles}>Attempting to join game...</h1>
       )}
-      {session?.current_game_code === code && <InviteScreen />}
+      {session?.current_game_code === code && !game?.is_viable && (
+        <InviteScreen />
+      )}
+      {session?.current_game_code === code && game?.is_viable && <Game />}
     </div>
   );
 };

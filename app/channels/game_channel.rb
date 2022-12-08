@@ -34,7 +34,7 @@ class GameChannel < ApplicationCable::Channel
       playerArr = []
       gamePlayers.each do |player|
         user = User.find(player[:user_id])
-        playerArr.append({ **player, username: user[:username] })
+        playerArr.append({ active_hand: player[:active_hand], username: user[:username] })
       end
 
       ActionCable.server.broadcast("game_channel", { type: "CURRENT_PLAYERS", payload: playerArr })

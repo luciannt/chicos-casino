@@ -1,6 +1,6 @@
 import React from "react";
 
-const Board = () => {
+const Board = ({ ctx, G, moves }) => {
   return <div>Board</div>;
 };
 

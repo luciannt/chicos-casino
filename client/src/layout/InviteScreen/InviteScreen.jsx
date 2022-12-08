@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import loading from "../../assets/loading.svg";
+
 import styles from "./styles/InviteScreen.module.scss";
 
 const InviteScreen = () => {
@@ -14,6 +16,7 @@ const InviteScreen = () => {
 
   return (
     <div className={styles["container"]}>
+      <img src={loading} />
       <h2>Waiting for more players...</h2>
       <p
         className={styles["invite-code"]}
@@ -28,8 +31,14 @@ const InviteScreen = () => {
       >
         Invite Code: {showAlert ? "Copied!" : code}
       </p>
-      {game?.players.map((player) => (
-        <p>{player?.username}</p>
+      {game?.players.map((player, i) => (
+        <>
+          <p className={styles.player}>{player?.username}</p>
+
+          {game?.players.length > 1 && i !== 1 && (
+            <p className={styles.versus}>VS</p>
+          )}
+        </>
       ))}
     </div>
   );

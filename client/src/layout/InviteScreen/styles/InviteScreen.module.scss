@@ -16,7 +16,7 @@
     border-radius: 8px;
     cursor: pointer;
     transition: 0.3s ease;
-    margin-bottom: 16px;
+    margin-bottom: 32px;
     width: 60%;
     text-align: center;
 
@@ -24,5 +24,20 @@
       background: rgb(110, 110, 110);
       color: white;
     }
+  }
+
+  .player {
+    margin: 8px;
+    font-size: 20px;
+    border: none;
+  }
+
+  .versus {
+    border-bottom: 1px solid black;
+    padding: 10px !important;
+    width: 30%;
+    text-align: center;
+    font-size: 17px;
+    margin: 16px 0;
   }
 }
