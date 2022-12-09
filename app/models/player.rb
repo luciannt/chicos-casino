@@ -47,6 +47,10 @@ class Player < ApplicationRecord
     hand.nil?
   end
 
+  def get_top_scores
+    players = Players.where()
+  end
+
   private
 
   def marshall_card_data
