@@ -72,12 +72,106 @@ class Game < ApplicationRecord
     game = Game.find_by_game_code(code)
     deck = Table.shoe(game[:table_id])
     new_card = deck.deal
-
     player.hands_data = [new_card]
     player.save
   end
 
-  def self.hit(code, user_id)
-    # TODO: Win/Lose check
+  def self.hit(code, player_id)
+    player = Player.find(player_id[:player_id])
+    game = Game.find_by_game_code(code)
+    table = Table.find(game[:table_id])
+    deck = Table.shoe(game[:table_id])
+    deck.shuffle
+    new_card = deck.deal
+    table.save
+
+    if player[:hands_data]
+      hand = Hand.new(player[:hands_data][0]["cards"])
+      hand.add(new_card.cards[0])
+      player.hands_data = [hand]
+      player.save
+    else
+      Game.deal(code, player)
+    end
+
+    rival = player
+
+    gamePlayers = Player.where(game: game)
+
+    gamePlayers.each do |user|
+      if player[:user_id] != user[:user_id]
+        rival = user
+        game[:player_turn] = user[:user_id]
+        game.save
+      end
+    end
+
+    score = Blackjack.score(player.hands_data)
+    player.hand_score = score
+    player.save
+
+    if Blackjack.busted?(player.hands_data)
+      if rival[:score]
+        rival.score = rival[:score] + 1
+      else
+        rival.score = 1
+      end
+
+      game.end = true
+      rival.save
+      game.save
+    end
+
+    message = { end: game[:end], hand_score: player[:hand_score] }
+    message
+  end
+
+  def self.stand(code, player)
+    player.stand = true
+    player.save
+
+    game = Game.find_by_game_code(code)
+
+    rival = player
+
+    gamePlayers = Player.where(game: game)
+
+    gamePlayers.each do |user|
+      if player[:user_id] != user[:user_id]
+        rival = user
+
+        if rival[:stand] == true
+          game.end = true
+          game.save
+
+          rival_score = Blackjack.score(rival.hands_data)
+          player_score = Blackjack.score(player.hands_data)
+
+          if (rival_score > player_score)
+            if rival[:score]
+              rival.score = rival[:score] + 1
+            else
+              rival.score = 1
+            end
+
+            rival.save
+          else
+            if player[:score]
+              player.score = player[:score] + 1
+            else
+              player.score = 1
+            end
+
+            player.save
+          end
+        else
+          game[:player_turn] = user[:user_id]
+          game.save
+        end
+      end
+    end
+
+    message = { end: game[:end], hand_score: player[:hand_score] }
+    message
   end
 end

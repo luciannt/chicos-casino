@@ -3,11 +3,14 @@ module Blackjack
     def score(hand, options = {})
       options.reverse_merge!({ aces: :best })
       aces_high = options[:aces] == :high
+      values = []
+      hand = hand[0]
+      hand["cards"].map { |card| values.append(value_for(card, aces_high)) }
 
-      score = hand.cards.map { |card| value_for(card, aces_high) }.sum
+      score = values.inject(0, :+)
 
       if options[:aces] == :best
-        aces_in_hand = hand.cards.detect { |c| c.rank == :ace }.present?
+        aces_in_hand = hand["cards"].detect { |c| c["rank"] == "ace" }.present?
         score += 10 if aces_in_hand && score < 12
       end
 
@@ -15,7 +18,7 @@ module Blackjack
     end
 
     def busted?(hand)
-      score(hand) > 21
+      self.score(hand) > 21
     end
 
     def result(player_hand, dealer_hand)
@@ -53,29 +56,29 @@ module Blackjack
     private
 
     def value_for(card, aces_high)
-      case card.rank
-      when :ace
+      case card["rank"]
+      when "ace"
         aces_high ? 11 : 1
-      when :two
+      when "two"
         2
-      when :three
+      when "three"
         3
-      when :four
+      when "four"
         4
-      when :five
+      when "five"
         5
-      when :six
+      when "six"
         6
-      when :seven
+      when "seven"
         7
-      when :eight
+      when "eight"
         8
-      when :nine
+      when "nine"
         9
-      when :ten, :jack, :queen, :king
+      when "ten", "jack", "queen", "king"
         10
-      else
-        raise PlayError, "#{card.rank} is an illegal card in Blackjack"
+        # else
+        #   raise PlayError, "#{card.rank} is an illegal card in Blackjack"
       end
     end
   end

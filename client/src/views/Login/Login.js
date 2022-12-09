@@ -19,7 +19,6 @@ const Login = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     axios.post("/login", { ...values }).then((res) => {
-      console.log(res.data);
       dispatch({ type: LOGIN, payload: res.data });
 
       navigate("/menu");

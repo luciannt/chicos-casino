@@ -14,11 +14,142 @@
   margin: 32px;
 }
 
+.loading {
+  background: black;
+  opacity: 0.6;
+  height: 99.9vh;
+  width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  p {
+    color: white;
+  }
+
+  z-index: 9999;
+
+  img {
+    width: 100px;
+  }
+}
+
+.end {
+  background: black;
+  opacity: 0.9;
+  height: 99.9vh;
+  width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  gap: 40px;
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    width: 100%;
+
+    button {
+      font-size: 20px;
+      width: 20%;
+      min-width: 175px;
+      background-color: white;
+      border: rgb(90, 89, 89) 3px solid;
+      color: rgb(90, 89, 89);
+      transition: 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgb(116, 115, 115);
+        color: white;
+      }
+    }
+
+    a {
+      font-size: 20px;
+      color: white;
+      text-decoration: none;
+      position: relative;
+
+      &::after {
+        width: 100%;
+        max-width: 0px;
+        transition: 0.4s ease-in-out;
+        content: "";
+        height: 1px;
+        position: absolute;
+        background-color: white;
+        bottom: -55%;
+        left: 0;
+      }
+
+      &:hover {
+        &::after {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+
+  p {
+    color: white;
+    font-size: 40px;
+  }
+
+  &.loss {
+    p {
+      color: #f06969;
+    }
+  }
+}
+
+.control {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+
+  button {
+    font-size: 30px;
+    width: 25%;
+    min-width: 20%;
+    background-color: white;
+    border: rgb(90, 89, 89) 3px solid;
+    color: rgb(90, 89, 89);
+    transition: 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(216, 215, 215);
+    }
+  }
+}
+
 .player-cards {
   display: flex;
   justify-content: center;
   align-items: flex-end;
   height: 100%;
+  gap: 10px;
 
   .card-image {
     margin-bottom: 50px;
@@ -27,9 +158,11 @@
 
 .rival-cards {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
   height: 100%;
+  gap: 10px;
 
   .card-image {
     margin-top: 50px;

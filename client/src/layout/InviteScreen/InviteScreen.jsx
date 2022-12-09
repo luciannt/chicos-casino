@@ -13,10 +13,7 @@ const InviteScreen = () => {
   const gameChannel = useSelector((state) => state.connections.game);
   const game = useSelector((state) => state.game);
 
-  console.log(game.players);
-
   const handleClick = () => {
-    console.log(gameChannel.start_game);
     gameChannel?.start_game();
   };
 

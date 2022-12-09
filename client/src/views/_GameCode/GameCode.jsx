@@ -32,7 +32,6 @@ const GameCode = () => {
           received: (data) => {
             if (data.type) {
               if (data.type === "CURRENT_PLAYERS") {
-                console.log(data);
                 dispatch({
                   type: data.type,
                   payload: { players: { ...data.payload }, me: session?.id },
@@ -49,6 +48,7 @@ const GameCode = () => {
             });
           },
           new_game: () => {
+            dispatch({ type: "RESET_GAME", payload: {} });
             gameConnection.perform("new_game", {
               user_id: session?.id,
             });
@@ -56,6 +56,18 @@ const GameCode = () => {
           start_game: () => {
             gameConnection.perform("start_game", {
               code,
+            });
+          },
+          hit: () => {
+            gameConnection.perform("hit", {
+              code,
+              user_id: session?.id,
+            });
+          },
+          stand: () => {
+            gameConnection.perform("stand", {
+              code,
+              user_id: session?.id,
             });
           },
         }
@@ -69,7 +81,9 @@ const GameCode = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      gameChannel?.game_check();
+      if (!game?.end) {
+        gameChannel?.game_check();
+      }
     }, 5000);
 
     return () => clearInterval(intervalId);

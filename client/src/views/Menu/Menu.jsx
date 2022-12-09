@@ -27,7 +27,6 @@ const Menu = () => {
     const createSocket = () => {
       if (!session?.id) {
         axios.get("/me").then((res) => {
-          console.log(res.data);
           dispatch({ type: LOGIN, payload: { ...res.data } });
         });
       }
@@ -55,8 +54,6 @@ const Menu = () => {
           },
         }
       );
-
-      console.log(gameConnection);
 
       dispatch({ type: SET_GAME_SUBSCRIPTIONS, payload: gameConnection });
     };

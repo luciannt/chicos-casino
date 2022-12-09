@@ -15,6 +15,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    user = User.find_by(id: cookies.signed[:user_id])
+    if user
+      render json: user.update(user_params), status: :ok
+    else
+      render json: { error: "Unauthorized user" }, status: :unauthorized
+    end
+  end
+
   private
 
   def user_params
