@@ -1,0 +1,47 @@
+.links {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin-top: 50px;
+
+  h2 {
+    font-size: 30px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    gap: 30px;
+    font-size: 30px;
+    color: black;
+
+    text-decoration: none;
+    position: relative;
+
+    &::after {
+      width: 100%;
+      max-width: 0px;
+      transition: 0.4s ease-in-out;
+      content: "";
+      height: 3px;
+      position: absolute;
+      background-color: black;
+      bottom: -40%;
+      left: 0;
+    }
+
+    &:hover {
+      &::after {
+        max-width: 100%;
+      }
+    }
+
+    img {
+      height: 50px;
+    }
+  }
+}

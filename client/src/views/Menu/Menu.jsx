@@ -15,13 +15,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+import NavBar from "../../components/NavBar/NavBar";
+
 const Menu = () => {
   const dispatch = useDispatch();
   const gameChannel = useSelector((state) => state.connections.game);
   const session = useSelector((state) => state.sessions.id);
+  const navigate = useNavigate();
 
   const [inviteCode, setInviteCode] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const createSocket = () => {
@@ -75,25 +77,32 @@ const Menu = () => {
 
   return (
     <div>
+      <NavBar />
       <div className={styles.menu}>
+        <button
+          className={styles.settings}
+          onClick={() => navigate("/settings")}
+        >
+          <img src="https://cdn-icons-png.flaticon.com/512/561/561196.png" />
+        </button>
+        <h3>{session?.username}</h3>
         <div className={styles.createGame}>
           <h2>Create Game</h2>
-          <h4>Must have two players to start, max four players</h4>
+          <h4>Two players are required</h4>
           <button onClick={onCreateGame}>Create</button>
         </div>
-        <div className={styles.joinGame}>
+        <form className={styles.joinGame} onSubmit={onJoinGame}>
           <h2>Join Game</h2>
           <h4>Input game code to join an existing match</h4>
-          <input
-            type="text"
-            placeholder="Enter game code"
-            onChange={onChangeHandler}
-          />
-          <button onClick={onJoinGame}>Join</button>
-        </div>
-      </div>
-      <div className={styles.scores}>
-        <button onClick={onJoinGame}>Your Scores</button>
+          <div>
+            <input
+              type="text"
+              placeholder="Enter game code"
+              onChange={onChangeHandler}
+            />
+            <button type="submit">Join</button>
+          </div>
+        </form>
       </div>
     </div>
   );
