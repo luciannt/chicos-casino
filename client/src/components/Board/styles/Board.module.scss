@@ -1,8 +1,42 @@
 .container {
-  background-image: url("https://i.pinimg.com/originals/f8/68/4d/f8684daff3da3b0ae8d5d47904b210b3.gif");
+  height: 92vh;
+
+  background-image: url("../../../assets/game-background.svg");
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
 
-  height: 98vh;
+  display: flex;
+  flex-direction: column;
+  border: rgb(90, 89, 89) 3px solid;
+  border-radius: 10px;
+
+  margin: 32px;
+}
+
+.player-cards {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+
+  .card-image {
+    margin-bottom: 50px;
+  }
+}
+
+.rival-cards {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+
+  .card-image {
+    margin-top: 50px;
+  }
+}
+
+.card-image {
+  height: 150px;
+  border-radius: 10px;
 }

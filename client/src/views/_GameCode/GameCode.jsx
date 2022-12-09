@@ -35,7 +35,7 @@ const GameCode = () => {
                 console.log(data);
                 dispatch({
                   type: data.type,
-                  payload: { ...data.payload, me: session?.id },
+                  payload: { players: { ...data.payload }, me: session?.id },
                 });
               } else {
                 dispatch(data);

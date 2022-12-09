@@ -9,4 +9,8 @@ export const numMap = {
   eight: 8,
   nine: 9,
   ten: 10,
+  ace: "ace",
+  queen: "queen",
+  king: "king",
+  jack: "jack",
 };
