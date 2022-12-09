@@ -22,7 +22,7 @@ class Game < ApplicationRecord
   def self.join_game(user_id, code)
     game = Game.find_by_game_code(code)
     user = User.find_by(:id => user_id)
-    table = Table.find_by_game(game)
+    table = Table.find(game[:table_id])
 
     gamePlayers = Player.where(game: game)
 
@@ -54,27 +54,30 @@ class Game < ApplicationRecord
     end
   end
 
-  def self.start_game(code, p1, p2)
-    game = Game.find_by_game_code(code)
-    table = Table.find_by_game()
-    ActionCable.server.broadcast("game_channel", { type: "START_GAME", message: table })
+  def self.start_game(code)
+    if (Game.can_start_game(code))
+      game = Game.find_by_game_code(code)
+      game.started = true
+      game.save!
+      table = Table.find(game[:table_id])
+      Table.setup(table[:id])
+      ActionCable.server.broadcast("game_channel", { type: "START_GAME", message: table })
+      table
+    else
+      table
+    end
   end
 
-  def self.deal(code, user_id)
-    player = Player.find_by_user(user_id)
+  def self.deal(code, player)
     game = Game.find_by_game_code(code)
-    table = Table.find_by_game(game)
-    deck = table[:dealer_hand_data]
+    deck = Table.shoe(game[:table_id])
     new_card = deck.deal
 
-    parsed_deck = JSON.parse(deck)
-    parsed_deck.merge(new_card)
-    player.hands_data = parsed_deck
+    player.hands_data = [new_card]
     player.save
-
-    # TODO: Win/Lose check
   end
 
   def self.hit(code, user_id)
+    # TODO: Win/Lose check
   end
 end

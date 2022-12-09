@@ -1,8 +1,6 @@
 class Table < ApplicationRecord
   has_many :players, dependent: :destroy
-
-  before_create :setup
-  before_save :marshall_card_data
+  # before_save :marshall_card_data
 
   def deal
     # Deal cards in 2 passes, as would be done live
@@ -26,11 +24,12 @@ class Table < ApplicationRecord
       end
   end
 
-  def shoe
+  def self.shoe(id)
+    table = Table.find(id)
     @shoe ||= begin
-        return nil if shoe_data.nil?
+        return nil if table[:shoe_data] == nil
 
-        Deck.from_parsed_json(shoe_data)
+        Deck.from_parsed_json(table[:shoe_data])
       end
   end
 
@@ -40,8 +39,11 @@ class Table < ApplicationRecord
 
   private
 
-  def setup
+  def self.setup(id)
     @shoe = Deck.new(shuffled: true)
+    table = Table.find(id)
+    table.shoe_data = @shoe
+    table.save
   end
 
   def marshall_card_data

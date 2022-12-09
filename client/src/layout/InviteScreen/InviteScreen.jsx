@@ -10,27 +10,44 @@ const InviteScreen = () => {
   const [showAlert, setShowAlert] = useState(false);
   const { code } = useParams();
 
+  const gameChannel = useSelector((state) => state.connections.game);
   const game = useSelector((state) => state.game);
 
   console.log(game.players);
 
+  const handleClick = () => {
+    console.log(gameChannel.start_game);
+    gameChannel?.start_game();
+  };
+
   return (
     <div className={styles["container"]}>
       <img src={loading} />
-      <h2>Waiting for more players...</h2>
-      <p
-        className={styles["invite-code"]}
-        onClick={() => {
-          setShowAlert(true);
-          navigator.clipboard.writeText(code);
+      {game?.players.length !== 2 ? (
+        <h2>Waiting for more players...</h2>
+      ) : (
+        <h2>Are you ready?</h2>
+      )}
+      {game?.players.length !== 2 && (
+        <p
+          className={styles["invite-code"]}
+          onClick={() => {
+            setShowAlert(true);
+            navigator.clipboard.writeText(code);
 
-          setTimeout(() => {
-            setShowAlert(false);
-          }, 3000);
-        }}
-      >
-        Invite Code: {showAlert ? "Copied!" : code}
-      </p>
+            setTimeout(() => {
+              setShowAlert(false);
+            }, 3000);
+          }}
+        >
+          Invite Code: {showAlert ? "Copied!" : code}
+        </p>
+      )}
+      {game?.is_viable && game?.players.length === 2 && (
+        <button onClick={handleClick} className={styles["start-button"]}>
+          Start Game
+        </button>
+      )}
       {game?.players.map((player, i) => (
         <>
           <p className={styles.player}>{player?.username}</p>

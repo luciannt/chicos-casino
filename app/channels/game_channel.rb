@@ -7,7 +7,7 @@ class GameChannel < ApplicationCable::Channel
   def unsubscribed
     puts "Unsubscribed"
     ActionCable.server.broadcast "game_channel", { type: "unsubscribe" }.to_json
-    stop_all_streams
+    stop_all_streams()
   end
 
   def received(data)
@@ -34,10 +34,11 @@ class GameChannel < ApplicationCable::Channel
       playerArr = []
       gamePlayers.each do |player|
         user = User.find(player[:user_id])
-        playerArr.append({ active_hand: player[:active_hand], username: user[:username] })
+        playerArr.append({ active_hand: player[:active_hand], hands_data: player[:hands_data], username: user[:username], id: user[:id] })
       end
 
       ActionCable.server.broadcast("game_channel", { type: "CURRENT_PLAYERS", payload: playerArr })
+      ActionCable.server.broadcast("game_channel", { type: "GAME_STARTED", payload: game[:started] })
 
       if !(gamePlayers.exists? user[:id])
         Game.join_game(opts["user_id"], opts["code"])
@@ -45,10 +46,17 @@ class GameChannel < ApplicationCable::Channel
     end
   end
 
-  def start_game(code)
+  def start_game(opts)
+    Game.start_game(opts["code"])
+
+    game = Game.find_by_game_code(opts["code"])
     gamePlayers = Player.where(game: game)
-    table = Game.start_game(code, gamePlayers[0], gamePlayers[1])
-    ActionCable.server.broadcast("game_channel", { type: "STARTED", payload: table })
+
+    gamePlayers.each do |player|
+      Game.deal(code, player)
+    end
+
+    ActionCable.server.broadcast("game_channel", { type: "DEALT", payload: gamePlayers })
   end
 
   def new_game(opts)

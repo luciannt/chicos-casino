@@ -8,6 +8,7 @@ import { LOGIN, SET_GAME_SUBSCRIPTIONS } from "../../reducers/constants";
 import styles from "./styles/GameCode.module.scss";
 import { useParams } from "react-router-dom";
 import Game from "../../components/Game/Game";
+import loading from "../../assets/accessories/silver_coin_gif.gif";
 
 const GameCode = () => {
   const dispatch = useDispatch();
@@ -29,9 +30,16 @@ const GameCode = () => {
         },
         {
           received: (data) => {
-            // console.log("DATA", data);
             if (data.type) {
-              dispatch(data);
+              if (data.type === "CURRENT_PLAYERS") {
+                console.log(data);
+                dispatch({
+                  type: data.type,
+                  payload: { ...data.payload, me: session?.id },
+                });
+              } else {
+                dispatch(data);
+              }
             }
           },
           game_check: () => {
@@ -43,6 +51,11 @@ const GameCode = () => {
           new_game: () => {
             gameConnection.perform("new_game", {
               user_id: session?.id,
+            });
+          },
+          start_game: () => {
+            gameConnection.perform("start_game", {
+              code,
             });
           },
         }
@@ -76,13 +89,19 @@ const GameCode = () => {
 
   return (
     <div>
-      {session?.current_game_code !== code && (
-        <h1 className={styles}>Attempting to join game...</h1>
-      )}
-      {session?.current_game_code === code && !game?.is_viable && (
+      {session?.current_game_code === code && !game?.started && (
         <InviteScreen />
       )}
-      {session?.current_game_code === code && game?.is_viable && <Game />}
+      {session?.current_game_code === code &&
+      game?.is_viable &&
+      game?.started ? (
+        <Game />
+      ) : (
+        <div className={styles["join-attempt"]}>
+          <p>Attempting to join game...</p>
+          <img src={loading} />
+        </div>
+      )}
     </div>
   );
 };

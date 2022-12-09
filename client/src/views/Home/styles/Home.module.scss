@@ -1,0 +1,19 @@
+.navBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: rgb(177, 177, 177);
+}
+
+.loginSignup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+h3,
+h2,
+h1 {
+  text-align: center;
+  margin: 20px;
+}

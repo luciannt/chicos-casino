@@ -1,0 +1,16 @@
+.join-attempt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 99vh;
+  flex-direction: column;
+
+  img {
+    height: 150px;
+    margin: 20px;
+  }
+
+  p {
+    font-size: 32px;
+  }
+}

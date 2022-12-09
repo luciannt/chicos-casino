@@ -26,6 +26,24 @@
     }
   }
 
+  .start-button {
+    margin-bottom: 32px;
+    background: transparent;
+    border: solid 1px black;
+    padding: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-bottom: 32px;
+    width: 63%;
+    text-align: center;
+
+    &:hover {
+      background: rgb(110, 110, 110);
+      color: white;
+    }
+  }
+
   .player {
     margin: 8px;
     font-size: 20px;
@@ -34,7 +52,8 @@
 
   .versus {
     border-bottom: 1px solid black;
-    padding: 10px !important;
+    padding: 10px;
+    padding-top: 0;
     width: 30%;
     text-align: center;
     font-size: 17px;
