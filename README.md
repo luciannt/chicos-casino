@@ -1,24 +1,9 @@
-# README
+Chicot's Casino is a multiplayer Blackjack game where you compete against each other to win.
+This game was created by me as part of Flatiron's Phase 5 Capstone project.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To run Chicot's Casino on your local machine:
+> Clone this repository
+> Navigate into the Chicot's Casino folder
+> Type npm install and bundle install in the terminal 
+> Run npm start and rails s in the terminal to start the game
+> Open localhost to play the game!
